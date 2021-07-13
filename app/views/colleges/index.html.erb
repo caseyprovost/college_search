@@ -1,0 +1,15 @@
+<%= form_tag root_path, method: :get do %>
+  <%= text_field_tag :search, params[:search] %>
+  <%= submit_tag "Search" %>
+<% end %>
+
+<br>
+<br>
+
+<% if @colleges.any? %>
+  <% @colleges.each do |college| %>
+    <div><%= college[:name] %></div>
+  <% end %>
+<% else %>
+  <p>No colleges match the criteria</p>
+<% end %>
