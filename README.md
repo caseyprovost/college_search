@@ -24,3 +24,4 @@ bin/rake test
 ### Trade-offs
 * This is structured as a decently-tested POC simply due to time constraints
 * Chose to implement a quick-and-dirty caching strategy. This would likely be better served in Redis, or even in the DB.
+* due to time constraints I scope hammered dealing with pagination. In a real app or V2 we would definitely handle that.
