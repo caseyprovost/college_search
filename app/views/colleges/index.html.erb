@@ -8,8 +8,60 @@
 
 <% if @colleges.any? %>
   <% @colleges.each do |college| %>
-    <div><%= college[:name] %></div>
+    <div>
+      <%= college[:name] %> (<%= college[:latitude] %>/<%= college[:longitude] %>)
+    </div>
   <% end %>
 <% else %>
   <p>No colleges match the criteria</p>
 <% end %>
+
+<br>
+<br>
+
+
+<div id="map"></div>
+<div id="colleges" data-colleges="<%= @colleges.to_json %>"></div>
+
+<!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+<script>
+  let map;
+  let schools = JSON.parse(document.querySelector("#colleges").dataset.colleges)
+
+  function initMap() {
+    bound = new google.maps.LatLngBounds();
+
+    schools.forEach((school) => {
+      bound.extend( new google.maps.LatLng(school.latitude, school.longitude));
+    })
+
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: bound.getCenter(),
+      zoom: 4,
+    });
+
+    console.log(schools.length)
+
+    schools.forEach((school) => {
+      const marker = new google.maps.Marker({
+        // The below line is equivalent to writing:
+        // position: new google.maps.LatLng(-34.397, 150.644)
+        position: { lat: school.latitude, lng: school.longitude },
+        map: map,
+      });
+
+      const infowindow = new google.maps.InfoWindow({
+        content: `<p>${school.name}</p>`,
+      });
+      google.maps.event.addListener(marker, "click", () => {
+        infowindow.open(map, marker);
+      });
+    })
+  }
+
+</script>
+
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_API_KEY'] %>&callback=initMap&libraries=&v=weekly"
+  async
+></script>
