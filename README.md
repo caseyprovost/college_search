@@ -2,6 +2,7 @@
 
 ### Getting started
 * cd into the project and bundle
+* generate a `.env` file using `.env.example` as a guide (get api keys, etc, etc)
 * Run `bin/rails s` to start the server
 * You can now search colleges to your heart's content :)
 
